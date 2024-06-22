@@ -23,7 +23,7 @@ Sigue estos pasos para ejecutar este proyecto localmente:
 3. Instala las dependencias: `npm install`
 4. Inicia el servidor: `npm run start`
 
-Esta suponiendo que tienes Node.js instalado en tu computadora. Si no es así, puedes descargarlo y instalarlo desde [aquí](https://nodejs.org/en/download/).
+Si no tienes node instalado puedes descargarlo desde [aquí](https://nodejs.org/en/download/).
 
 ## API Endpoints
 
