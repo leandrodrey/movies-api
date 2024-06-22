@@ -1,0 +1,56 @@
+### GET request to example server
+//GET https://examples.http-client.intellij.net/get?generated-in=IntelliJ IDEA
+
+### GET all Movies
+GET http://localhost:3000/movies
+
+### GET a Movie by ID
+GET http://localhost:3000/movies/ccf36f2e-8566-47f7-912d-9f4647250bc7
+
+### GET Movies by Genre
+GET http://localhost:3000/movies?genre=action
+
+### POST /movies wrong information
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+    "title": "The Matrix",
+    "genre": "action",
+    "year": 1999
+}
+
+### POST /movies good information
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+    "id": "ccf36f2e-8566-47f7-912d-9f4647250333",
+    "title": "Pepito Le",
+    "year": 1985,
+    "director": "Leandro Rey",
+    "duration": 195,
+    "poster": "https://i.pinimg.com/originals/42/42/65/4242658e6f1b0d6322a4a93e0383108b.png",
+    "genre": [
+        "Comedy",
+        "Fantasy"
+    ],
+    "rate": 9.8
+}
+
+### PATCH /movies
+PATCH http://localhost:3000/movies/ccf36f2e-8566-47f7-912d-9f4647250333
+Content-Type: application/json
+
+{
+    "title": "Pepito Le",
+    "year": 1985,
+    "director": "Leandro Rey",
+    "duration": 195,
+    "poster": "https://i.pinimg.com/originals/42/42/65/4242658e6f1b0d6322a4a93e0383108b.png",
+    "genre": [
+        "Comedy",
+        "Fantasy"
+    ],
+    "rate": 9.8
+}
