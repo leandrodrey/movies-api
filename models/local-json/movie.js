@@ -1,4 +1,4 @@
-import {readJSON} from "../utils/utils.js";
+import {readJSON} from "../../utils/utils.js";
 import {v4 as uuidv4} from "uuid";
 
 const movies = readJSON('./movies.json');
