@@ -42,7 +42,6 @@ export class MoviesController {
         if (result.error) {
             return res.status(400).json({error: JSON.parse(result.error.message)});
         }
-
         const updatedMovie = await MovieModel.update({id, input: result.data});
         if (!updatedMovie) {
             return res.status(404).send('Movie not found');
