@@ -1,10 +1,12 @@
-const express = require('express');
-const movies = require('./movies.json');
-const uuid = require('uuid');
-const cors = require('cors');
-const {validateMovie, validatePartialMovie} = require("./movies");
+import express, {json} from 'express';
+import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors';
+import {validateMovie, validatePartialMovie} from "./schemas/movies.js";
+import {readJSON} from "./utils/utils.js";
 
-const PORT = process.env.PORT ?? 8080;
+const movies = readJSON('./movies.json');
+
+const PORT = process.env.PORT ?? 3000;
 
 const app = express();
 app.disable('x-powered-by');
@@ -22,7 +24,7 @@ app.use(cors(
         }
     }
 ));
-app.use(express.json());
+app.use(json());
 
 app.get('/movies', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -52,7 +54,7 @@ app.post('/movies', (req, res) => {
     }
 
     const newMovie = {
-        id: uuid.v4(),
+        id: uuidv4(),
         ...result.data,
     };
 
