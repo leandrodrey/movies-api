@@ -11,7 +11,7 @@ app.disable('x-powered-by');
 app.use(cors(
     {
         origin: (origin, callback) => {
-            const ACCEPTED_ORIGINS = ['http://localhost:3000', 'https://example.com'];
+            const ACCEPTED_ORIGINS = [''];
             if (ACCEPTED_ORIGINS.includes(origin)) {
                 return callback(null, true);
             }
@@ -93,5 +93,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server started on http://localhost:${PORT}`);
+    console.log(`Server started on ${PORT}`);
 });
