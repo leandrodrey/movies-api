@@ -4,7 +4,7 @@ const uuid = require('uuid');
 const cors = require('cors');
 const {validateMovie, validatePartialMovie} = require("./movies");
 
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ?? 8080;
 
 const app = express();
 app.disable('x-powered-by');
