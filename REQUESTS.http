@@ -5,7 +5,7 @@
 GET http://localhost:3000/movies
 
 ### GET a Movie by ID
-GET http://localhost:3000/movies/ccf36f2e-8566-47f7-912d-9f4647250bc7
+GET http://localhost:3000/movies/e9284288-3331-11ef-8fb0-50e0859c1e71
 
 ### GET Movies by Genre
 GET http://localhost:3000/movies?genre=action
@@ -25,17 +25,26 @@ POST http://localhost:3000/movies
 Content-Type: application/json
 
 {
-    "id": "ccf36f2e-8566-47f7-912d-9f4647250333",
+    "id": "ccf36f2e-8566-47f7-912d-9f4634250333",
     "title": "Pepito Le",
     "year": 1985,
-    "director": "Leandro Rey",
     "duration": 195,
     "poster": "https://i.pinimg.com/originals/42/42/65/4242658e6f1b0d6322a4a93e0383108b.png",
+    "rate": 9.8,
+    "trailer": "https://www.youtube.com/watch?v=NmzuHjWmXOc",
+    "status": "Released",
+    "budget": 60000000,
+    "revenue": 294288404,
     "genre": [
         "Comedy",
         "Fantasy"
     ],
-    "rate": 9.8
+    "director": "Leandro Rey",
+    "actors": [
+        "Leandro Rey",
+        "Leandro Rey",
+        "Leandro Rey"
+    ]
 }
 
 ### PATCH /movies
