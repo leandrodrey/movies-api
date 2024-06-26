@@ -7,18 +7,16 @@ const movieSchema = z.object({
         }
     ),
     year: z.number().int().min(1900).max(2025),
-    director: z.string(),
     duration: z.number().int().positive(),
     poster: z.string().url(),
-    genre: z.array(
-        z.enum(['Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Sci-Fi', 'Thriller']),
-        {
-            invalid_type_error: 'Genre must be an array of strings',
-            required_error: 'Genre is required',
-            invalid_enum_error: 'Invalid genre',
-        }
-    ),
-    rate: z.number().min(1).max(10).optional().default(5)
+    rate: z.number().min(1).max(10).optional().default(5),
+    trailer: z.string().url().optional(),
+    status: z.enum(['Rumored', 'Planned', 'In Production', 'Post Production', 'Released', 'Canceled']).optional().default('Released'),
+    budget: z.number().int().positive().optional(),
+    revenue: z.number().int().positive().optional(),
+    genres: z.array(z.string()).optional(),
+    actors: z.array(z.string()).optional(),
+    directors: z.array(z.string()).optional(),
 });
 
 function validateMovie(movie) {
