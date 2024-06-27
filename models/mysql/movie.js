@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise';
+import { v4 as uuidv4 } from 'uuid';
 
 const DEFAULT_CONFIG = {
     host: 'localhost',
@@ -74,114 +75,215 @@ export class MovieModel {
         }
     }
 
-    static async create({input}) {
+    static async create({ input }) {
         const connection = await mysql.createConnection(connectionString);
 
         try {
-            // Iniciar una transacción para garantizar la consistencia de los datos
             await connection.beginTransaction();
 
-            // Insertar la nueva película en la tabla 'movie'
+            const movieId = Buffer.from(uuidv4().replace(/-/g, ''), 'hex');
+
             const [result] = await connection.execute(
-                mysql.format(
-                    'INSERT INTO movie (id, title, year, duration, poster, rate, trailer, status, budget, revenue) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                    [input.title, input.year, input.duration, input.poster, input.rate, input.trailer, input.status, input.budget, input.revenue]
-                )
+                'INSERT INTO movie (id, title, year, duration, poster, rate, trailer, status, budget, revenue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [
+                    movieId,
+                    input.title,
+                    input.year,
+                    input.duration,
+                    input.poster,
+                    input.rate,
+                    input.trailer,
+                    input.status,
+                    input.budget,
+                    input.revenue,
+                ]
             );
-            const movieId = result.insertId;
 
-            // Insertar o obtener los IDs de los actores
-            const actorIds = await Promise.all(input.actors.map(async (actor) => {
-                const [rows] = await connection.query('SELECT id FROM actor WHERE name = ?', [actor]);
-                if (rows.length) {
-                    return rows[0].id;
-                } else {
-                    const [result] = await connection.query('INSERT INTO actor (name) VALUES (?)', [actor]);
-                    return result.insertId;
-                }
-            }));
-            const actorValues = actorIds.map(actorId => [movieId, actorId]);
-            await connection.query('INSERT INTO movie_actor (movie_id, actor_id) VALUES ?', [actorValues]);
-
-            // Insertar o obtener los IDs de los directores
-            const [directorRows] = await connection.query('SELECT id FROM director WHERE name = ?', [input.director]);
-            let directorId;
-            if (directorRows.length) {
-                directorId = directorRows[0].id;
-            } else {
-                const [result] = await connection.query('INSERT INTO director (name) VALUES (?)', [input.director]);
-                directorId = result.insertId;
+            if (input.actors && input.actors.length > 0) {
+                const actorIds = await this._getActorIds(connection, input.actors);
+                const actorValues = actorIds.map((actorId) => [movieId, actorId]);
+                await connection.query(
+                    'INSERT INTO movie_actor (movie_id, actor_id) VALUES ?',
+                    [actorValues]
+                );
             }
-            await connection.query('INSERT INTO movie_director (movie_id, director_id) VALUES (?, ?)', [movieId, directorId]);
 
-            // Insertar o obtener los IDs de los géneros
-            const genreIds = await Promise.all(input.genre.map(async (genre) => {
-                const [rows] = await connection.query('SELECT id FROM genre WHERE name = ?', [genre]);
-                if (rows.length) {
-                    return rows[0].id;
-                } else {
-                    const [result] = await connection.query('INSERT INTO genre (name) VALUES (?)', [genre]);
-                    return result.insertId;
-                }
-            }));
-            const genreValues = genreIds.map(genreId => [movieId, genreId]);
-            await connection.query('INSERT INTO movie_genre (movie_id, genre_id) VALUES ?', [genreValues]);
+            if (input.directors && input.directors.length > 0) {
+                const directorIds = await this._getDirectorIds(connection, input.directors);
+                const directorValues = directorIds.map((directorId) => [movieId, directorId]);
+                await connection.query(
+                    'INSERT INTO movie_director (movie_id, director_id) VALUES ?',
+                    [directorValues]
+                );
+            }
 
-            // Confirmar la transacción si todo salió bien
+            if (input.genres && input.genres.length > 0) {
+                const genreIds = await this._getGenreIds(connection, input.genres);
+                const genreValues = genreIds.map((genreId) => [movieId, genreId]);
+                await connection.query(
+                    'INSERT INTO movie_genre (movie_id, genre_id) VALUES ?',
+                    [genreValues]
+                );
+            }
+
             await connection.commit();
 
-            return movieId;
+            return movieId.toString('hex');
         } catch (error) {
-            // Revertir la transacción en caso de error
             await connection.rollback();
-            console.error('Error al crear la película:', error);
+            console.error("Error al crear la película:", error);
             throw error;
         } finally {
-            // Cerrar la conexión en cualquier caso
             connection.end();
         }
     }
 
     static async delete({ id }) {
-        let connection;
+        const connection = await mysql.createConnection(connectionString);
+
         try {
-            connection = await mysql.createConnection(connectionString);
-            await connection.beginTransaction(); // Iniciar una transacción
+            const movieId = Buffer.from(id.replace(/-/g, ''), 'hex');
 
-            // Eliminar relaciones en las tablas intermedias
-            await connection.execute('DELETE FROM movie_actor WHERE movie_id = UNHEX(REPLACE(?, "-", ""))', [id]);
-            await connection.execute('DELETE FROM movie_director WHERE movie_id = UNHEX(REPLACE(?, "-", ""))', [id]);
-            await connection.execute('DELETE FROM movie_genre WHERE movie_id = UNHEX(REPLACE(?, "-", ""))', [id]);
+            await connection.beginTransaction();
 
-            // Eliminar la película de la tabla 'movie'
-            const [result] = await connection.execute('DELETE FROM movie WHERE id = UNHEX(REPLACE(?, "-", ""))', [id]);
+            await connection.execute('DELETE FROM movie_actor WHERE movie_id = ?', [movieId]);
+            await connection.execute('DELETE FROM movie_director WHERE movie_id = ?', [movieId]);
+            await connection.execute('DELETE FROM movie_genre WHERE movie_id = ?', [movieId]);
 
-            await connection.commit(); // Confirmar la transacción
+            const [result] = await connection.execute('DELETE FROM movie WHERE id = ?', [movieId]);
 
-            return result.affectedRows > 0; // Devolver true si se eliminó la película
+            await connection.commit();
+
+            return result.affectedRows > 0;
         } catch (error) {
-            if (connection) await connection.rollback(); // Revertir la transacción en caso de error
+            await connection.rollback();
             console.error('Error al eliminar la película:', error);
             throw error;
         } finally {
-            if (connection) connection.end(); // Cerrar la conexión
+            connection.end();
         }
     }
 
-    static async update({id, input}) {
-        let connection;
+    static async update({ id, input }) {
+        const connection = await mysql.createConnection(connectionString);
+
         try {
-            connection = await mysql.createConnection(connectionString);
-            const [result] = await connection.execute(
-                'UPDATE movie SET title = ?, year = ?, duration = ?, poster = ?, rate = ?, trailer = ?, status = ?, budget = ?, revenue = ? WHERE id = UNHEX(REPLACE(?, "-", ""))',
-                [input.title, input.year, input.duration, input.poster, input.rate, input.trailer, input.status, input.budget, input.revenue, id]
-            );
-            return result.affectedRows > 0; // Devuelve true si se actualizó alguna fila
+            const movieId = Buffer.from(id.replace(/-/g, ''), 'hex');
+
+            await connection.beginTransaction();
+
+            const fieldsToUpdate = Object.keys(input)
+                .filter(key => key !== 'actors' && key !== 'directors' && key !== 'genres')
+                .map(key => `${key} = ?`)
+                .join(', ');
+
+            if (fieldsToUpdate) {
+                const valuesToUpdate = Object.values(input)
+                    .filter(value => value !== input.actors && value !== input.directors && value !== input.genres);
+                valuesToUpdate.push(movieId); // Agregar el movieId al final
+
+                await connection.execute(
+                    `UPDATE movie SET ${fieldsToUpdate} WHERE id = ?`,
+                    valuesToUpdate
+                );
+            }
+
+            if (input.actors) {
+                await connection.execute('DELETE FROM movie_actor WHERE movie_id = ?', [movieId]);
+                if (input.actors.length > 0) {
+                    const actorIds = await this._getActorIds(connection, input.actors);
+                    const actorValues = actorIds.map((actorId) => [movieId, actorId]);
+                    await connection.query('INSERT INTO movie_actor (movie_id, actor_id) VALUES ?', [actorValues]);
+                }
+            }
+
+            if (input.directors) {
+                await connection.execute('DELETE FROM movie_director WHERE movie_id = ?', [movieId]);
+                if (input.directors.length > 0) {
+                    const directorIds = await this._getDirectorIds(connection, input.directors);
+                    const directorValues = directorIds.map((directorId) => [movieId, directorId]);
+                    await connection.query('INSERT INTO movie_director (movie_id, director_id) VALUES ?', [directorValues]);
+                }
+            }
+
+            if (input.genres) {
+                await connection.execute('DELETE FROM movie_genre WHERE movie_id = ?', [movieId]);
+                if (input.genres.length > 0) {
+                    const genreIds = await this._getGenreIds(connection, input.genres);
+                    const genreValues = genreIds.map((genreId) => [movieId, genreId]);
+                    await connection.query('INSERT INTO movie_genre (movie_id, genre_id) VALUES ?', [genreValues]);
+                }
+            }
+
+            await connection.commit();
+
+            return true;
         } catch (error) {
+            await connection.rollback();
             console.error('Error al actualizar la película:', error);
             throw error;
         } finally {
-            if (connection) connection.end();
+            connection.end();
         }
+    }
+
+    static async _getActorIds(connection, actorNames) {
+        const actorIds = [];
+        for (const actorName of actorNames) {
+            const [rows] = await connection.query(
+                'SELECT id FROM actor WHERE name = ?',
+                [actorName]
+            );
+            if (rows.length) {
+                actorIds.push(rows[0].id);
+            } else {
+                const [result] = await connection.query(
+                    'INSERT INTO actor (name) VALUES (?)',
+                    [actorName]
+                );
+                actorIds.push(result.insertId);
+            }
+        }
+        return actorIds;
+    }
+
+    static async _getDirectorIds(connection, directorNames) {
+        const directorIds = [];
+        for (const directorName of directorNames) {
+            const [rows] = await connection.query(
+                'SELECT id FROM director WHERE name = ?',
+                [directorName]
+            );
+            if (rows.length) {
+                directorIds.push(rows[0].id);
+            } else {
+                const [result] = await connection.query(
+                    'INSERT INTO actor (name) VALUES (?)',
+                    [directorName]
+                );
+                directorIds.push(result.insertId);
+            }
+        }
+        return directorIds;
+    }
+
+    static async _getGenreIds(connection, genreNames) {
+        const genreIds = [];
+        for (const genreName of genreNames) {
+            const [rows] = await connection.query(
+                'SELECT id FROM genre WHERE name = ?',
+                [genreName]
+            );
+            if (rows.length) {
+                genreIds.push(rows[0].id);
+            } else {
+                const [result] = await connection.query(
+                    'INSERT INTO genre (name) VALUES (?)',
+                    [genreName]
+                );
+                genreIds.push(result.insertId);
+            }
+        }
+        return genreIds;
     }
 }
