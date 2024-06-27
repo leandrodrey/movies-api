@@ -1,16 +1,29 @@
-### GET request to example server
-//GET https://examples.http-client.intellij.net/get?generated-in=IntelliJ IDEA
-
 ### GET all Movies
 GET http://localhost:3000/movies
 
 ### GET a Movie by ID
 GET http://localhost:3000/movies/e9284288-3331-11ef-8fb0-50e0859c1e71
 
-### GET Movies by Genre
-GET http://localhost:3000/movies?genre=action
+### POST a new Movie
+POST http://localhost:3000/movies
+Content-Type: application/json
 
-### POST /movies wrong information
+{
+    "title": "The Shawshank Redemption PEPITO",
+    "year": 1994,
+    "duration": 142,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg",
+    "rate": 9.3,
+    "trailer": "https://www.youtube.com/watch?v=6hB3S9bIaco",
+    "status": "Released",
+    "budget": 25000000,
+    "revenue": 28341469,
+    "actors": ["Billy Zane"],
+    "directors": ["Peter Jackson","Leandro Rey"],
+    "genres": ["Drama"]
+}
+
+### POST a new Movie without required fields to get a validation error
 POST http://localhost:3000/movies
 Content-Type: application/json
 
@@ -20,46 +33,24 @@ Content-Type: application/json
     "year": 1999
 }
 
-### POST /movies good information
-POST http://localhost:3000/movies
+### DELETE /movies by ID
+DELETE http://localhost:3000/movies/dd8eabd6-e4f7-4287-8c53-c32344c11ec2
+
+### PATCH /movies by ID
+PATCH http://localhost:3000/movies/dd59defa-d5ab-4051-8463-9469f4652122
 Content-Type: application/json
 
 {
-    "id": "ccf36f2e-8566-47f7-912d-9f4634250333",
-    "title": "Pepito Le",
-    "year": 1985,
-    "duration": 195,
-    "poster": "https://i.pinimg.com/originals/42/42/65/4242658e6f1b0d6322a4a93e0383108b.png",
-    "rate": 9.8,
-    "trailer": "https://www.youtube.com/watch?v=NmzuHjWmXOc",
+    "title": "LA PELICULA PEPITO MODIFICADA",
+    "year": 1994,
+    "duration": 142,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg",
+    "rate": 9.3,
+    "trailer": "https://www.youtube.com/watch?v=6hB3S9bIaco",
     "status": "Released",
-    "budget": 60000000,
-    "revenue": 294288404,
-    "genre": [
-        "Comedy",
-        "Fantasy"
-    ],
-    "director": "Leandro Rey",
-    "actors": [
-        "Leandro Rey",
-        "Leandro Rey",
-        "Leandro Rey"
-    ]
-}
-
-### PATCH /movies
-PATCH http://localhost:3000/movies/ccf36f2e-8566-47f7-912d-9f4647250333
-Content-Type: application/json
-
-{
-    "title": "Pepito Le",
-    "year": 1985,
-    "director": "Leandro Rey",
-    "duration": 195,
-    "poster": "https://i.pinimg.com/originals/42/42/65/4242658e6f1b0d6322a4a93e0383108b.png",
-    "genre": [
-        "Comedy",
-        "Fantasy"
-    ],
-    "rate": 9.8
+    "budget": 333,
+    "revenue": 333,
+    "actors": ["YO MISMO"],
+    "directors": ["Peter Jackson","Leandro Rey"],
+    "genres": ["Drama"]
 }
