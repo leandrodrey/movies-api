@@ -8,6 +8,7 @@ import { openapiSpecification } from './swagger.js';
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'node_modules/swagger-ui-dist')));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 app.disable('x-powered-by');
