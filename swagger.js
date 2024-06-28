@@ -7,17 +7,7 @@ const options = {
       title: 'Movies API',
       version: '1.0.0',
       description: 'API for managing movie data.',
-    },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-        description: 'Development server',
-      },
-      {
-        url: 'https://nodejsapi.elsuperhard.com/',
-        description: 'Prod server',
-      },
-    ],
+    }
   },
   apis: ['./routes/*.js'], // Path to the API routes files
 };
