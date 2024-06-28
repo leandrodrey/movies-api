@@ -1,5 +1,3 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import express, {json} from 'express';
 import {corsMiddleware} from "./middlewares/cors.js";
 import {docRouter} from './routes/api-docs.js';
@@ -8,11 +6,7 @@ import {MovieModel} from "./models/mysql/movie.js";
 
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use('/api-docs', express.static(path.join(__dirname, 'swagger-ui-dist')));
 app.use('/api-docs', docRouter);
-
 app.disable('x-powered-by');
 app.use(json());
 app.use(corsMiddleware());
