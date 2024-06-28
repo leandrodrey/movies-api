@@ -1,14 +1,14 @@
 import mysql from 'mysql2/promise';
 import { v4 as uuidv4 } from 'uuid';
 
-const config = {
-    host: process.env.MYSQL_HOST || 'localhost',
-    user: process.env.MYSQL_USER || 'root',
-    port: process.env.MYSQL_PORT || 3306,
-    password: process.env.MYSQL_PASSWORD || 'secret',
-    database: process.env.MYSQL_DATABASE || 'moviesdb'
+const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    port: process.env.MYSQL_PORT,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
 };
-const connectionString = process.env.DATABASE_URL ?? config;
+const connectionString = process.env.DATABASE_URL ?? dbConfig;
 
 export class MovieModel {
 
@@ -32,8 +32,21 @@ export class MovieModel {
                 LEFT JOIN genre g ON mg.genre_id = g.id
                 GROUP BY m.id
             `;
-            const [rows] = await connection.execute(query);
-            return rows;
+
+            const [rows] = await connection.execute(query)
+
+            // Convertir el ID de Buffer a UUID
+            const formattedRows = rows.map(row => {
+                return {
+                    ...row,
+                    id: Buffer.from(row.id).toString('hex').replace(
+                        /(.{8})(.{4})(.{4})(.{4})(.{12})/,
+                        '$1-$2-$3-$4-$5'
+                    )
+                }
+            })
+            return formattedRows
+
         } catch (error) {
             console.error('Error al obtener todas las películas:', error);
             throw error;
@@ -64,14 +77,26 @@ export class MovieModel {
                 GROUP BY m.id
             `;
 
-            const [rows] = await connection.execute(query, [id]);
+            const [rows] = await connection.execute(query, [id])
+            if (rows.length) {
+                // Convertir el ID de Buffer a UUID
+                const formattedRow = {
+                    ...rows[0],
+                    id: Buffer.from(rows[0].id).toString('hex').replace(
+                        /(.{8})(.{4})(.{4})(.{4})(.{12})/,
+                        '$1-$2-$3-$4-$5'
+                    )
+                }
+                return formattedRow
+            } else {
+                return null
+            }
 
-            return rows.length ? rows[0] : null;
         } catch (error) {
-            console.error('Error al obtener la película por ID:', error);
-            throw error;
+            console.error('Error al obtener la película por ID:', error)
+            throw error
         } finally {
-            if (connection) connection.end();
+            if (connection) connection.end()
         }
     }
 
