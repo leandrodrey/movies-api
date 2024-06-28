@@ -2,7 +2,7 @@
 GET http://localhost:3000/movies
 
 ### GET a Movie by ID
-GET http://localhost:3000/movies/e9284288-3331-11ef-8fb0-50e0859c1e71
+GET http://localhost:3000/movies/e928473a-3331-11ef-8fb0-50e0859c1e71
 
 ### POST a new Movie
 POST http://localhost:3000/movies
