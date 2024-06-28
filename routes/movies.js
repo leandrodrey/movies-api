@@ -60,9 +60,10 @@ export const createMoviesRouter = ({movieModel}) => {
      *       - in: path
      *         name: id
      *         schema:
-     *           type: integer
+     *           type: string
      *         required: true
      *         description: ID de la película
+     *         example: "e928473a-3331-11ef-8fb0-50e0859c1e71"
      *     responses:
      *       200:
      *         description: Película encontrada.
