@@ -6,11 +6,11 @@ import {MovieModel} from "./models/mysql/movie.js";
 
 const app = express();
 
+app.use('/api-docs', docRouter);
 app.disable('x-powered-by');
 app.use(json());
 app.use(corsMiddleware());
 app.use('/movies', createMoviesRouter({movieModel: MovieModel}));
-app.use('/api-docs', docRouter);
 
 const PORT = process.env.PORT ?? 3000;
 
