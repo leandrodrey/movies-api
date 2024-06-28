@@ -6,10 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import { openapiSpecification } from './swagger.js';
 
 const app = express();
-
-app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', swaggerUi.setup(openapiSpecification));
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 app.disable('x-powered-by');
 app.use(json());
 app.use(corsMiddleware());
