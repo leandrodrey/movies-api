@@ -8,15 +8,9 @@ export const createMoviesRouter = ({movieModel}) => {
 
     /**
      * @swagger
-     * tags:
-     *   name: Películas
-     *   description: Operaciones relacionadas con películas
-     */
-
-    /**
-     * @swagger
      * /movies:
      *   get:
+     *     tags: [Movies]
      *     summary: Obtiene todas las películas.
      *     responses:
      *       200:
@@ -34,6 +28,7 @@ export const createMoviesRouter = ({movieModel}) => {
      * @swagger
      * /movies:
      *   post:
+     *     tags: [Movies]
      *     summary: Crea una nueva película.
      *     requestBody:
      *       required: true
@@ -55,6 +50,7 @@ export const createMoviesRouter = ({movieModel}) => {
      * @swagger
      * /movies/{id}:
      *   get:
+     *     tags: [Movies]
      *     summary: Obtiene una película por ID.
      *     parameters:
      *       - in: path
@@ -80,6 +76,7 @@ export const createMoviesRouter = ({movieModel}) => {
      * @swagger
      * /movies/{id}:
      *   delete:
+     *     tags: [Movies]
      *     summary: Elimina una película por ID.
      *     parameters:
      *       - in: path
@@ -100,6 +97,7 @@ export const createMoviesRouter = ({movieModel}) => {
      * @swagger
      * /movies/{id}:
      *   patch:
+     *     tags: [Movies]
      *     summary: Actualiza una película por ID.
      *     parameters:
      *       - in: path

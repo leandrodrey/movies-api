@@ -6,7 +6,7 @@ const options = {
     info: {
       title: 'Movies API',
       version: '1.0.0',
-      description: 'API for managing movie data.',
+      description: 'Codo a Codo. API by Express.js.',
     }
   },
   apis: ['./routes/*.js'], // Path to the API routes files
