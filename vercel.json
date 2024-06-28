@@ -6,7 +6,6 @@
             "use": "@vercel/node"
         }
     ],
-    "includeFiles": ["swagger-ui-dist/**"],
     "routes": [
         {
             "src": "/(.*)",
