@@ -4,7 +4,6 @@ import {openapiSpecification} from '../swagger.js';
 
 const docRouter = Router();
 
-docRouter.use('/api-docs', swaggerUi.serve);
-docRouter.get('/', swaggerUi.setup(openapiSpecification));
+docRouter.use('/', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 export { docRouter };
