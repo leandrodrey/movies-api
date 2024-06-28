@@ -1,10 +1,9 @@
-/*import dotenv from 'dotenv'*/
 import express, {json} from 'express';
 import {corsMiddleware} from "./middlewares/cors.js";
 import {createMoviesRouter} from './routes/movies.js';
 import {MovieModel} from "./models/mysql/movie.js";
-/*import swaggerUi from 'swagger-ui-express';
-import { openapiSpecification } from './swagger.js';*/
+import swaggerUi from 'swagger-ui-express';
+import { openapiSpecification } from './swagger.js';
 
 dotenv.config()
 
