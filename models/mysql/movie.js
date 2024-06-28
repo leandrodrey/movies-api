@@ -1,14 +1,14 @@
 import mysql from 'mysql2/promise';
 import { v4 as uuidv4 } from 'uuid';
 
-const DEFAULT_CONFIG = {
-    host: 'localhost',
-    user: 'root',
-    port: 3306,
-    password: 'secret',
-    database: 'moviesdb'
+const config = {
+    host: process.env.MYSQL_HOST || 'localhost',
+    user: process.env.MYSQL_USER || 'root',
+    port: process.env.MYSQL_PORT || 3306,
+    password: process.env.MYSQL_PASSWORD || 'secret',
+    database: process.env.MYSQL_DATABASE || 'moviesdb'
 };
-const connectionString = process.env.DATABASE_URL ?? DEFAULT_CONFIG;
+const connectionString = process.env.DATABASE_URL ?? config;
 
 export class MovieModel {
 
