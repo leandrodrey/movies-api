@@ -1,7 +1,6 @@
-import { Router } from 'express'
+import { Router } from 'express';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
 
-const docRouter = Router()
+const docRouter = Router();
 
-docRouter.get('/api-docs', swaggerUi.setup(swaggerDocument));
+docRouter.get('/', swaggerUi.setup());
