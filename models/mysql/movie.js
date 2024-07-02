@@ -1,14 +1,6 @@
 import mysql from 'mysql2/promise';
 import { v4 as uuidv4 } from 'uuid';
-
-const dbConfig = {
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    port: process.env.MYSQL_PORT,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
-};
-const connectionString = process.env.DATABASE_URL ?? dbConfig;
+import { connectionString } from '../../utils/db-connect.js';
 
 export class MovieModel {
 
