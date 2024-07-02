@@ -2,7 +2,9 @@ import express, { json } from 'express'
 import { corsMiddleware } from './middlewares/cors.js'
 import { docRouter } from './routes/api-docs.js'
 import { createMoviesRouter } from './routes/movies.js'
+import { createAuthRouter } from './routes/auth.js'
 import { MovieModel } from './models/mysql/movie.js'
+import { AuthModel } from './models/auth/auth.js'
 
 const app = express()
 
@@ -12,18 +14,7 @@ app.use(json())
 app.use(corsMiddleware())
 app.use('/api-docs', docRouter)
 app.use('/movies', createMoviesRouter({ movieModel: MovieModel }))
-
-app.post('/login', (req, res) => {
-})
-
-app.post('/register', (req, res) => {
-})
-
-app.post('/logout', (req, res) => {
-})
-
-app.get('/protected', (req, res) => {
-})
+app.use('/auth', createAuthRouter({ authModel: AuthModel }))
 
 const PORT = process.env.PORT ?? 3000
 
