@@ -62,6 +62,8 @@ export class AuthController {
     }
 
     logout = async (req, res) => {
+        res.clearCookie('access_token')
+        res.status(200).send('Logged out')
     }
 
     getLoggedUserFromSession = (req, res) => {
