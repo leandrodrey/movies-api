@@ -24,7 +24,12 @@ export class AuthController {
             const user = await this.authModel.login({ email: result.data.email })
             const token = jwt.sign({ user }, process.env.JWT_SECRET ?? 'secret test to use in local', { expiresIn: '1h' })
             if (user) {
-                res.status(200).json({ user, token });
+                res.cookie('access_token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict'
+                })
+                res.status(200).json({ user, token })
             } else {
                 return res.status(401).json({ error: 'Invalid credentials' })
             }
@@ -59,7 +64,13 @@ export class AuthController {
     logout = async (req, res) => {
     }
 
-    getProtected = async (req, res) => {
+    getProtected = (req, res) => {
+        const { user } = req.session
+        console.log('user:', user)
+        if (!user) {
+            return res.status(401).json({ error: 'Unauthorized' })
+        }
+        return res.status(200).json(user)
     }
 
 }
