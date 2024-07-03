@@ -11,4 +11,5 @@ export const createAuthRouter = ({ authModel }) => {
   authRouter.post('/logout', authController.logout)
   authRouter.get('/', authController.getProtected)
 
+  return authRouter
 }
