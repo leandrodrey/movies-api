@@ -76,3 +76,6 @@ Content-Type: application/json
     "email": "pepito@pepe.com",
     "password": "123456"
 }
+
+### GET if an user is logged in
+GET http://localhost:3000/auth
