@@ -99,9 +99,8 @@ export class MovieModel {
             await connection.beginTransaction();
 
             const movieId = Buffer.from(uuidv4().replace(/-/g, ''), 'hex');
-
-            const [result] = await connection.execute(
-                'INSERT INTO movie (id, title, year, duration, poster, rate, trailer, status, budget, revenue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            const sql = 'INSERT INTO movie (id, title, year, duration, poster, rate, trailer, status, budget, revenue) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            const [result] = await connection.execute(sql,
                 [
                     movieId,
                     input.title,
