@@ -1,5 +1,5 @@
-import express, { json } from 'express'
 import dotenv from 'dotenv'
+import express, { json } from 'express'
 import { corsMiddleware } from './middlewares/cors.js'
 import { docRouter } from './routes/api-docs.js'
 import { createMoviesRouter } from './routes/movies.js'
