@@ -54,3 +54,25 @@ Content-Type: application/json
     "directors": ["Peter Jackson","Leandro Rey"],
     "genres": ["Drama"]
 }
+
+### POST Create a new User
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Pepito",
+    "lastname": "Perez",
+    "email": "pepito@pepe.com",
+    "password": "123456",
+    "birthdate": "1990-01-01",
+    "country": "Argentina"
+}
+
+### POST Login an User
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "pepito@pepe.com",
+    "password": "123456"
+}
