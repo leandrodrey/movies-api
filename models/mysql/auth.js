@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise'
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcrypt'
-import { connectionString } from '../../utils/db-connect.js'
+import { connectionString } from '../../db/db-connect.js'
 
 export class AuthModel {
 
