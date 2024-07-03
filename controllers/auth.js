@@ -64,7 +64,7 @@ export class AuthController {
     logout = async (req, res) => {
     }
 
-    getProtected = (req, res) => {
+    getLoggedUserFromSession = (req, res) => {
         const { user } = req.session
         console.log('user:', user)
         if (!user) {
