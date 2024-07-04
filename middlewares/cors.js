@@ -1,7 +1,8 @@
 import cors from "cors";
 
 const ACCEPTED_ORIGINS = [
-    process.env.VERCEL_URL
+    process.env.VERCEL_URL,
+    'http://localhost:63342'
 ];
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => cors(
