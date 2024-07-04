@@ -7,9 +7,17 @@ export class MoviesController {
     }
 
     getAll = async (req, res) => {
-        const {genre} = req.query;
-        const movies = await this.movieModel.getAll({genre});
-        res.json(movies);
+        const { genre, sortOrder = 'asc' } = req.query
+        try {
+            const movies = await this.movieModel.getAll({ genre, sortOrder })
+            if (!movies) {
+                return res.status(404).send('Movies not found')
+            }
+            res.json(movies)
+        } catch (error) {
+            console.error(error)
+            res.status(500).send('Internal server error')
+        }
     }
 
     getById = async (req, res) =>{
