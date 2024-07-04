@@ -9,7 +9,7 @@ POST http://localhost:3000/movies
 Content-Type: application/json
 
 {
-    "title": "The Shawshank Redemption PEPITO",
+    "title": "The Shawshank Redemption PEPITO 2",
     "year": 1994,
     "duration": 142,
     "poster": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX1000_.jpg",
@@ -21,7 +21,7 @@ Content-Type: application/json
     "actors": ["Billy Zane"],
     "directors": ["Peter Jackson","Leandro Rey"],
     "genres": ["Drama"],
-    "overview ": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical"
+    "overview": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical"
 }
 
 ### POST a new Movie without required fields to get a validation error
@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ### DELETE /movies by ID
-DELETE http://localhost:3000/movies/8fc62559-589e-461a-adee-ee15af3a4078
+DELETE http://localhost:3000/movies/dc473422-79c3-46d3-af5e-25ce0de4b2d1
 
 ### PATCH /movies by ID
 PATCH http://localhost:3000/movies/4d2085a1-3ca9-43ee-b6b9-77021623d461
