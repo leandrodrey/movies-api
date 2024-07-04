@@ -34,10 +34,10 @@ Content-Type: application/json
 }
 
 ### DELETE /movies by ID
-DELETE http://localhost:3000/movies/dd8eabd6-e4f7-4287-8c53-c32344c11ec2
+DELETE http://localhost:3000/movies/8fc62559-589e-461a-adee-ee15af3a4078
 
 ### PATCH /movies by ID
-PATCH http://localhost:3000/movies/dd59defa-d5ab-4051-8463-9469f4652122
+PATCH http://localhost:3000/movies/4d2085a1-3ca9-43ee-b6b9-77021623d461
 Content-Type: application/json
 
 {
@@ -52,7 +52,15 @@ Content-Type: application/json
     "revenue": 333,
     "actors": ["YO MISMO"],
     "directors": ["Peter Jackson","Leandro Rey"],
-    "genres": ["Drama"]
+    "genres": ["Action,Fantasy,Drama"]
+}
+
+### PATCH /movies by ID
+PATCH http://localhost:3000/movies/dd59defa-d5ab-4051-8463-9469f4652122
+Content-Type: application/json
+
+{
+    "genres": ["Action,Fantasy,Drama"]
 }
 
 ### POST Create a new User
@@ -79,3 +87,7 @@ Content-Type: application/json
 
 ### GET if an user is logged in
 GET http://localhost:3000/auth
+
+### POST Logout an User
+POST http://localhost:3000/auth/logout
+Content-Type: application/json
