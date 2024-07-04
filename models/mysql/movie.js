@@ -4,43 +4,59 @@ import { connectionString } from '../../db/db-connect.js';
 
 export class MovieModel {
 
-    static async getAll() {
+    static async getAll({ genre, sortOrder = 'asc' }) {
         let connection;
         try {
             connection = await mysql.createConnection(connectionString);
 
-            const query = `
-                SELECT 
-                    m.*,
+            let query = `
+                SELECT m.*,
                     GROUP_CONCAT(DISTINCT a.name) AS actors,
                     GROUP_CONCAT(DISTINCT d.name) AS directors,
-                    GROUP_CONCAT(DISTINCT g.name) AS genres
+                        (
+                        SELECT GROUP_CONCAT(DISTINCT g.name)
+                        FROM movie_genre mg
+                                JOIN genre g ON mg.genre_id = g.id
+                        WHERE mg.movie_id = m.id
+                       ) AS genres
                 FROM movie m
-                LEFT JOIN movie_actor ma ON m.id = ma.movie_id
-                LEFT JOIN actor a ON ma.actor_id = a.id
-                LEFT JOIN movie_director md ON m.id = md.movie_id
-                LEFT JOIN director d ON md.director_id = d.id
-                LEFT JOIN movie_genre mg ON m.id = mg.movie_id
-                LEFT JOIN genre g ON mg.genre_id = g.id
-                GROUP BY m.id
+                        LEFT JOIN movie_actor ma ON m.id = ma.movie_id
+                        LEFT JOIN actor a ON ma.actor_id = a.id
+                        LEFT JOIN movie_director md ON m.id = md.movie_id
+                        LEFT JOIN director d ON md.director_id = d.id
+                        JOIN movie_genre mgf ON m.id = mgf.movie_id  -- JOIN para filtrar por género
+                        JOIN genre gf ON mgf.genre_id = gf.id
             `;
 
-            const [rows] = await connection.execute(query)
+            const params = [];
 
-            // Convertir el ID de Buffer a UUID
-            const formattedRows = rows.map(row => {
-                return {
-                    ...row,
-                    id: Buffer.from(row.id).toString('hex').replace(
-                        /(.{8})(.{4})(.{4})(.{4})(.{12})/,
-                        '$1-$2-$3-$4-$5'
-                    )
+            if (genre) {
+                query += ' WHERE gf.name LIKE ?';
+                params.push(`%${genre}%`);
+            }
+
+            query += ' GROUP BY m.id';
+
+            if (sortOrder) {
+                const validOrders = ['asc', 'desc'];
+                if (!validOrders.includes(sortOrder.toLowerCase())) {
+                    throw new Error('Invalid sort order. Use "asc" or "desc".');
                 }
-            })
-            return formattedRows
+                query += ` ORDER BY m.year ${sortOrder.toUpperCase()}`;
+            }
 
+            const [rows] = await connection.execute(query, params);
+
+            const formattedRows = rows.map((row) => ({
+                ...row,
+                id: row.id
+                    .toString('hex')
+                    .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5'),
+            }));
+
+            return formattedRows;
         } catch (error) {
-            console.error('Error al obtener todas las películas:', error);
+            console.error('Error fetching movies:', error);
             throw error;
         } finally {
             if (connection) connection.end();
