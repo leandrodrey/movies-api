@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser'
+import session from 'express-session';
 import { corsMiddleware } from './middlewares/cors.js'
 import { tokenCookie } from './middlewares/token-cookies.js'
 import { docRouter } from './routes/api-docs.js'
@@ -16,6 +17,16 @@ app.disable('x-powered-by')
 app.use(json())
 app.use(corsMiddleware())
 app.use(cookieParser())
+app.use(session({
+    secret: process.env.SESSION_SECRET ?? 'secret test to use in local',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true, // Protect against XSS attacks
+        sameSite: 'strict'  // Restrict to first-party context
+    }
+}));
 app.use(tokenCookie())
 app.use('/api-docs', docRouter)
 app.use('/movies', createMoviesRouter({ movieModel: MovieModel }))
