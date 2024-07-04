@@ -17,6 +17,7 @@ const movieSchema = z.object({
     genres: z.array(z.string()).optional(),
     actors: z.array(z.string()).optional(),
     directors: z.array(z.string()).optional(),
+    overview: z.string().optional()
 });
 
 function validateMovie(movie) {
