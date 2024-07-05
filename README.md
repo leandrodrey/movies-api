@@ -8,16 +8,16 @@ Este proyecto está construido con las siguientes tecnologías:
 
 - **express 4.19.2**: El framework web de Node.js utilizado para crear la API.
 - **mysql2 3.10.1**: El controlador de MySQL para Node.js, utilizado para interactuar con la base de datos.
-- **nodemon 3.1.4**: Para reiniciar automáticamente el servidor durante el desarrollo cuando se realizan cambios en los archivos. (dependencia de desarrollo)
 - **cors 2.8.5**: Para habilitar el Intercambio de Recursos de Origen Cruzado (CORS) y permitir solicitudes desde diferentes dominios.
 - **cookie-parser 1.4.6**: Para analizar y manejar cookies en las solicitudes HTTP.
-- **dotenv 16.4.5**: Para cargar variables de entorno desde un archivo `.env`. (dependencia de desarrollo)
 - **jsonwebtoken 9.0.2**: Para generar y verificar tokens JSON Web Tokens (JWT) para la autenticación.
 - **uuid 10.0.0**: Para generar identificadores únicos universales (UUID).
 - **bcrypt 5.1.1**: Para el hasheo y comparación segura de contraseñas.
 - **zod 3.23.8**: Para la validación de esquemas de datos y asegurar la integridad de los datos entrantes.
 - **swagger-jsdoc 6.2.8**: Para generar documentación de la API en formato OpenAPI/Swagger.
 - **swagger-ui-express 5.0.1**: Para servir la interfaz de usuario de Swagger, que permite visualizar y probar los endpoints de la API.
+- **nodemon 3.1.4**: Para reiniciar automáticamente el servidor durante el desarrollo cuando se realizan cambios en los archivos. (dependencia de desarrollo)
+- **dotenv 16.4.5**: Para cargar variables de entorno desde un archivo `.env`. (dependencia de desarrollo)
 
 Además, utiliza:
 
@@ -41,6 +41,10 @@ Si no tienes node instalado puedes descargarlo desde [aquí](https://nodejs.org/
 # Documentación de la API
 
 Esta API te permite gestionar una colección de películas y provee funcionalidades de autenticación de usuarios.
+
+A continuación se detallan los endpoints disponibles y cómo utilizarlos.
+
+Si prefiere una interfaz gráfica para interactuar con la API, puedes acceder a la documentación de Swagger en la ruta `/api-docs`.
 
 ## Endpoints de Películas
 
