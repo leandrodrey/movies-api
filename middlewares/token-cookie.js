@@ -4,8 +4,7 @@ export const tokenCookie = () => (req, res, next) => {
     const token = req.cookies['access_token']
     req.session = { user: null }
     try {
-        const data = jwt.verify(token, process.env.JWT_SECRET)
-        req.session.user = data
+        req.session.user = jwt.verify(token, process.env.JWT_SECRET)
     } catch {}
     next()
 }
