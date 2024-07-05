@@ -10,4 +10,3 @@ export const tokenCookie = () => (req, res, next) => {
     } catch {}
     next()
 }
-

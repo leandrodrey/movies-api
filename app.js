@@ -1,3 +1,4 @@
+import dotenv from 'dotenv'
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser'
 import { corsMiddleware } from './middlewares/cors.js'
@@ -7,6 +8,10 @@ import { createMoviesRouter } from './routes/movies.js'
 import { createAuthRouter } from './routes/auth.js'
 import { MovieModel } from './models/mysql/movie.js'
 import { AuthModel } from './models/mysql/auth.js'
+
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config()
+}
 
 const app = express()
 
