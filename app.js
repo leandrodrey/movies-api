@@ -9,7 +9,10 @@ import { createAuthRouter } from './routes/auth.js'
 import { MovieModel } from './models/mysql/movie.js'
 import { AuthModel } from './models/mysql/auth.js'
 
-dotenv.config()
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config()
+}
+
 const app = express()
 
 app.disable('x-powered-by')
