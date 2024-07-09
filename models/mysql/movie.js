@@ -161,7 +161,8 @@ export class MovieModel {
 
             await connection.commit();
 
-            return movieId.toString('hex');
+            const createdMovie = await this.getById({ id: movieId.toString('hex').replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5') }); // Obtener la película por su ID formateado
+            return createdMovie;
         } catch (error) {
             await connection.rollback();
             console.error("Error al crear la película:", error);
@@ -291,7 +292,7 @@ export class MovieModel {
                 directorIds.push(rows[0].id);
             } else {
                 const [result] = await connection.query(
-                    'INSERT INTO actor (name) VALUES (?)',
+                    'INSERT INTO director (name) VALUES (?)',
                     [directorName]
                 );
                 directorIds.push(result.insertId);
