@@ -3,6 +3,7 @@ import cors from "cors";
 const ACCEPTED_ORIGINS = [
     process.env.VERCEL_URL,
     'http://localhost:63342',
+    'http://localhost:3000',
     'https://codo-a-codo-js-api-front.vercel.app'
 ];
 
