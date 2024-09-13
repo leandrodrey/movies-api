@@ -1,6 +1,6 @@
-# Codo a Codo 2024 - Proyecto Final
+# Movies API - Proyecto Final
 
-API RESTful para una aplicación de catálogo de películas. Este proyecto fue desarrollado como parte del curso de Node.js de Codo a Codo 2024.
+API RESTful para una aplicación de catálogo de películas.
 
 ## Tecnologías Utilizadas
 
